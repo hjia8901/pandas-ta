@@ -782,10 +782,16 @@ class AnalysisIndicators(BasePandasObject):
                 if Imports["tqdm"] and verbose:
                     pbar = tqdm(ta, f"[i] Progress")
                     for ind in pbar:
-                        getattr(self, ind)(*tuple(), **kwargs)
+                        try:
+                            getattr(self, ind)(*tuple(), **kwargs)
+                        except:
+                            print(f"[X] ERROR in ta.strategy('{name}').'{ind}'.")
                 else:
                     for ind in ta:
-                        getattr(self, ind)(*tuple(), **kwargs)
+                        try:
+                            getattr(self, ind)(*tuple(), **kwargs)
+                        except:
+                            print(f"[X] ERROR in ta.strategy('{name}').'{ind}'.")
                 self._last_run = get_time(self.exchange, to_string=True)
 
         # Apply prefixes/suffixes and appends indicator results to the  DataFrame
