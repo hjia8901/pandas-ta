@@ -42,7 +42,7 @@ def is_datetime_ordered(df: DataFrame or Series) -> bool:
     except RuntimeWarning:
         pass
     finally:
-        return True if index_is_datetime and ordered else False
+        return True if (index_is_datetime and ordered) or len(df) == 1 else False
 
 
 def is_percent(x: int or float) -> bool:
