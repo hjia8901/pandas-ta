@@ -41,7 +41,7 @@ def ssf(close, length=None, poles=None, offset=None, **kwargs):
         b1 = 2 * a0 * npCos(x) # 2e^(-x)*cos(x)
         c1 = 1 - a1 - b1 # e^(-2x) - 2e^(-x)*cos(x) + 1
 
-        for i in range(0, m):
+        for i in range(2, m):
             ssf.iloc[i] = c1 * close.iloc[i] + b1 * ssf.iloc[i - 1] + a1 * ssf.iloc[i - 2]
 
     # Offset
