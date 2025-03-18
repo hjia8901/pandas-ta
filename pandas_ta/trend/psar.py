@@ -43,7 +43,7 @@ def psar(high, low, close=None, af0=None, af=None, max_af=None, offset=None, **k
 
     # Calculate Result
     m = high.shape[0]
-    for row in range(1, m):
+    for row in range(2, m):
         high_ = high.iloc[row]
         low_ = low.iloc[row]
 
