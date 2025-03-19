@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pandas import DataFrame
+from pandas import DataFrame, Series
 from pandas_ta.overlap import hlc3, ma
 from pandas_ta.utils import get_drift, get_offset, signed_series, verify_series
 
@@ -26,6 +26,9 @@ def kvo(high, low, close, volume, fast=None, slow=None, signal=None, mamode=None
     sv = signed_volume.loc[signed_volume.first_valid_index():,]
     kvo = ma(mamode, sv, length=fast) - ma(mamode, sv, length=slow)
     kvo_signal = ma(mamode, kvo.loc[kvo.first_valid_index():,], length=signal)
+
+    if kvo_signal is None:
+        kvo_signal = Series()
 
     # Offset
     if offset != 0:
