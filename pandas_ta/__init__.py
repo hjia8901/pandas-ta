@@ -4,20 +4,28 @@ name = "pandas_ta"
 """
 from importlib.util import find_spec
 from pathlib import Path
-from pkg_resources import get_distribution, DistributionNotFound
 
+import sys
+if sys.version_info >= (3, 8):
+    import importlib.metadata
 
-_dist = get_distribution("pandas_ta")
-try:
-    # Normalize case for Windows systems
-    here = Path(_dist.location) / __file__
-    if not here.exists():
-        # not installed, but there is another version that *is*
-        raise DistributionNotFound
-except DistributionNotFound:
-    __version__ = "Please install this project with setup.py"
+    try:
+        version = __version__ = importlib.metadata.version(__name__)
+    except importlib.metadata.PackageNotFoundError:
+        pass
+else:
+    from pkg_resources import get_distribution, DistributionNotFound
+    _dist = get_distribution(name)
+    try:
+        # Normalize case for Windows systems
+        here = Path(_dist.location) / __file__
+        if not here.exists():
+            # not installed, but there is another version that *is*
+            raise DistributionNotFound
+    except DistributionNotFound:
+        __version__ = "Please install this project with setup.py"
 
-version = __version__ = _dist.version
+    version = __version__ = _dist.version
 
 Imports = {
     "alphaVantage-api": find_spec("alphaVantageAPI") is not None,
