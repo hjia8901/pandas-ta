@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pandas import concat, DataFrame
+from pandas import concat, DataFrame, Series
 from pandas_ta import Imports
 from pandas_ta.overlap import ema
 from pandas_ta.utils import get_offset, verify_series, signals
@@ -30,7 +30,13 @@ def macd(close, fast=None, slow=None, signal=None, talib=None, offset=None, **kw
         slowma = ema(close, length=slow)
 
         macd = fastma - slowma
-        signalma = ema(close=macd.loc[macd.first_valid_index():,], length=signal)
+        first_valid = macd.first_valid_index()
+        if first_valid is None:
+            return
+
+        signalma = ema(close=macd.loc[first_valid:,], length=signal)
+        if signalma is None:
+            signalma = Series(index=macd.index, dtype="float64")
         histogram = macd - signalma
 
     if as_mode:
